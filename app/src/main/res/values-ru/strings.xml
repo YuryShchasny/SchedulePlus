@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SchedulePlus</string>
+    <string name="schedule">Расписание</string>
+    <string name="schedule_main">Основное</string>
+    <string name="schedule_edit">Изменить</string>
+    <string name="week_edit">Изменить неделю</string>
+    <string name="monday">Понедельник</string>
+    <string name="tuesday">Вторник</string>
+    <string name="wednesday">Среда</string>
+    <string name="thursday">Четверг</string>
+    <string name="friday">Пятница</string>
+    <string name="saturday">Суббота</string>
+    <string name="sunday">Воскресенье</string>
+    <string name="week">Неделя</string>
+    <string name="start">Начало</string>
+    <string name="end">Конец</string>
+    <string name="place">Место</string>
+    <string name="name">Название</string>
+    <string name="save">Сохранить</string>
+    <string name="example">Пример</string>
+    <string name="settings">Настройки</string>
+    <string name="navigation_drawer_open">Открыть</string>
+    <string name="navigation_drawer_close">Закрыть</string>
+    <string name="night_mode">Ночной режим</string>
+    <string name="about_the_developer">О разработчике</string>
+    <string name="telegram">Телеграм</string>
+    <string name="_continue">Продолжить</string>
+    <string name="on_boarding_title_1">Добро пожаловать в SchedulePlus!</string>
+    <string name="on_boarding_title_2">Оставайтесь организованными в движении!</string>
+    <string name="on_boarding_title_3">Легкость редактирования!</string>
+    <string name="on_boarding_title_4">Настройте свой вид!</string>
+    <string name="on_boarding_description_1">Возьмите под контроль своё время и задачи с нашим приложением! Планируйте свой день, устанавливайте напоминания и определяйте приоритеты ваших действий, чтобы быть организованными и продуктивными.</string>
+    <string name="on_boarding_description_2">Получайте доступ к своему расписанию в любое время и в любом месте. С нашим мобильным приложением вы можете оставаться организованными в движении, гарантируя, что вы никогда не пропустите встречу или срок.</string>
+    <string name="on_boarding_description_3">Наслаждайтесь гибкостью редактирования своего расписания с легкостью. Мы предоставляем обширные возможности редактирования, позволяя вам легко корректировать события, переставлять задачи и настраивать своё расписание.</string>
+    <string name="on_boarding_description_4">Переключайтесь между тёмным и светлым режимами для оптимального комфорта просмотра и наслаждайтесь настраиваемым интерфейсом, соответствующим вашим потребностям.</string>
+    <string name="info_about_app">Информация о приложении</string>
+    <string name="_switch">Переключение</string>
+    <string name="logo">Логотип</string>
+    <string name="button_to_add">Кнопка добавить</string>
+    <string name="schedule_icon">Иконка расписания</string>
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="onBackgroundDark">#3C3C3C</color>
+    <color name="onBackgroundLight">#FFFFFF</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="french_violet">#7400B8</color>
+    <color name="grape">#6930C3</color>
+    <color name="slate_blue">#5E60CE</color>
+    <color name="united_nations_blue">#5390D9</color>
+    <color name="picton_blue">#4EA8DE</color>
+    <color name="aero">#48BFE3</color>
+    <color name="sky_blue">#56CFE1</color>
+    <color name="tiffany_blue">#64DFDF</color>
+    <color name="turquoise">#72EFDD</color>
+    <color name="aquamarine">#80FFDB</color>
+    <color name="colorActive">?attr/colorPrimary</color>
+    <color name="colorNotActive">#D1D1D1</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="alpha0.5">#80FFFFFF</color>
+</resources>

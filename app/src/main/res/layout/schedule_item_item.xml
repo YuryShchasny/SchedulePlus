@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="?attr/colorOnBackground"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewStartTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/rubik_regular"
+                android:gravity="center"
+                android:textColor="?attr/textFillColor"
+                android:textSize="20sp"
+                tools:text="20:00" />
+
+            <TextView
+                android:id="@+id/textViewEndTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/rubik_regular"
+                android:gravity="end"
+                android:textColor="?attr/textFillColor"
+                android:textSize="16sp"
+                tools:text="22:00" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:layout_weight="0"
+            android:background="@drawable/color_shape"
+            android:backgroundTint="?attr/textFillColor" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textViewName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/rubik_regular"
+                    android:textColor="?attr/textFillColor"
+                    android:textSize="20sp"
+                    tools:text="ScheduleItem" />
+
+                <ImageView
+                    android:id="@+id/imageViewIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="2dp"
+                    android:contentDescription="@string/schedule_icon"
+                    android:src="@drawable/ic_schedule_main"
+                    app:tint="?attr/textFillColor" />
+
+
+                <TextView
+                    android:id="@+id/textViewNumbersOfWeek"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/rubik_regular"
+                    android:gravity="center_vertical"
+                    android:textColor="?attr/textFillColor"
+                    android:textSize="18sp"
+                    tools:text="1, 3" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textViewPlace"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:fontFamily="@font/rubik_regular"
+                android:textColor="?attr/textFillColor"
+                android:textSize="16sp"
+                tools:text="Place" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/viewColorShape"
+            android:layout_width="8dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="0"
+            android:background="@drawable/color_shape"
+            tools:backgroundTint="@color/aero" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

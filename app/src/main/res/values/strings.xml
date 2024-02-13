@@ -1,0 +1,50 @@
+<resources>
+    <string name="app_name">SchedulePlus</string>
+    <string name="schedule">Schedule</string>
+    <string name="schedule_main">Main</string>
+    <string name="schedule_edit">Edit</string>
+    <string name="week_edit">Week edit</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+    <string name="week">Week</string>
+    <string name="start">Start time</string>
+    <string name="end">End time</string>
+    <string name="place">Place</string>
+    <string name="name">Name</string>
+    <string name="save">Save</string>
+    <string name="example">Example</string>
+    <string name="settings">Settings</string>
+    <string-array name="day_of_week">
+        <item>@string/monday</item>
+        <item>@string/tuesday</item>
+        <item>@string/wednesday</item>
+        <item>@string/thursday</item>
+        <item>@string/friday</item>
+        <item>@string/saturday</item>
+        <item>@string/sunday</item>
+    </string-array>
+    <string name="navigation_drawer_open">Open</string>
+    <string name="navigation_drawer_close">Close</string>
+    <string name="night_mode">Night mode</string>
+    <string name="about_the_developer">About the developer</string>
+    <string name="telegram">Telegram</string>
+    <string name="_continue">Continue</string>
+    <string name="on_boarding_title_1">Welcome to SchedulePlus!</string>
+    <string name="on_boarding_title_2">Stay Organized on the Go!</string>
+    <string name="on_boarding_title_3">Edit with Ease!</string>
+    <string name="on_boarding_title_4">Customize Your View!</string>
+    <string name="on_boarding_description_1">Take control of your time and tasks effortlessly with our app! Schedule your day, set reminders, and prioritize your activities to stay organized and productive.</string>
+    <string name="on_boarding_description_2">Access your schedule anytime, anywhere. With our mobile app, you can stay organized on the go, ensuring you never miss an appointment or deadline.</string>
+    <string name="on_boarding_description_3">Enjoy the flexibility to edit your schedule with ease. We offer extensive editing capabilities, allowing you to adjust events, rearrange tasks, and fine-tune your schedule effortlessly.</string>
+    <string name="on_boarding_description_4">Switch between dark and light modes for optimal viewing comfort, and enjoy a customizable layout tailored to your needs.</string>
+    <string name="info_about_app">Info about app</string>
+    <string name="_switch">Switch</string>
+    <string name="logo">Logo</string>
+    <string name="button_to_add">Button to add</string>
+    <string name="schedule_icon">Schedule icon</string>
+</resources>

@@ -1,0 +1,24 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Theme.SchedulePlus" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/slate_blue</item>
+        <item name="colorPrimaryVariant">@color/slate_blue</item>
+        <item name="textFillColor">@color/white</item>
+        <item name="colorOnBackground">@color/onBackgroundDark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/grape</item>
+        <item name="colorSecondaryVariant">@color/french_violet</item>
+        <item name="colorOnSecondary">@color/slate_blue</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Other. -->
+    </style>
+    <style name="ActionBarCustom" parent="TextAppearance.Material3.ActionBar.Title">
+        <item name="android:gravity">center</item>
+    </style>
+    <style name="Theme.SchedulePlus.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.SchedulePlus.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />
+</resources>

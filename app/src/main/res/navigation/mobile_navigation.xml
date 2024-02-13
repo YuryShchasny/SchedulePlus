@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_schedule">
+
+    <fragment
+        android:id="@+id/navigation_schedule"
+        android:name="com.sbapps.scheduleplus.presentation.schedule.ScheduleFragment"
+        android:label="@string/schedule"
+        tools:layout="@layout/fragment_schedule" />
+
+    <fragment
+        android:id="@+id/navigation_schedule_main"
+        android:name="com.sbapps.scheduleplus.presentation.main.ScheduleMainFragment"
+        android:label="@string/schedule_main"
+        tools:layout="@layout/fragment_schedule_main" />
+
+    <fragment
+        android:id="@+id/navigation_shedule_edit"
+        android:name="com.sbapps.scheduleplus.presentation.edit.ScheduleEditFragment"
+        android:label="@string/schedule_edit"
+        tools:layout="@layout/fragment_schedule_edit">
+        <action
+            android:id="@+id/action_open_week_edit"
+            app:destination="@id/navigation_week_edit"
+            app:popUpTo="@id/navigation_shedule_edit" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/navigation_week_edit"
+        android:name="com.sbapps.scheduleplus.presentation.edit.week.WeekEditFragment"
+        android:label="@string/schedule_edit"
+        tools:layout="@layout/fragment_week_edit">
+    </fragment>
+    <fragment
+        android:id="@+id/onBoardingFragment"
+        android:name="com.sbapps.scheduleplus.presentation.onboarding.OnBoardingFragment"
+        android:label="fragment_on_boarding"
+        tools:layout="@layout/fragment_on_boarding" >
+        <action
+            android:id="@+id/action_onBoardingFragment_to_navigation_schedule"
+            app:destination="@id/navigation_schedule" />
+    </fragment>
+
+
+</navigation>
