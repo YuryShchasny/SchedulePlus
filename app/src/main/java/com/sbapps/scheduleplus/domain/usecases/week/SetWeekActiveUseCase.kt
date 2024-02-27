@@ -1,4 +1,4 @@
-package com.sbapps.scheduleplus.domain.usecases
+package com.sbapps.scheduleplus.domain.usecases.week
 
 import com.sbapps.scheduleplus.domain.repository.ScheduleRepository
 import com.sbapps.scheduleplus.domain.entity.Week

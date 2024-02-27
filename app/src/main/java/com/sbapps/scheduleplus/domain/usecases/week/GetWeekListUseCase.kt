@@ -1,4 +1,4 @@
-package com.sbapps.scheduleplus.domain.usecases
+package com.sbapps.scheduleplus.domain.usecases.week
 
 import androidx.lifecycle.LiveData
 import com.sbapps.scheduleplus.domain.repository.ScheduleRepository

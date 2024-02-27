@@ -13,6 +13,7 @@ import com.sbapps.scheduleplus.domain.entity.Week
 class ScheduleItemListAdapter(
     private val context: Context,
     private val weekList: List<Week>?, //null if showNumbersOfWeeks == false
+    private val scheduleItemList: List<ScheduleItem>?, //null if showNumbersOfWeeks == false
     private val showNumbersOfWeeks: Boolean = true
 ) : ListAdapter<ScheduleItem, ScheduleItemViewHolder>(ScheduleItemListDiffCallback()) {
 
@@ -47,27 +48,30 @@ class ScheduleItemListAdapter(
     }
 
     private fun getNumbersOfWeek(holder: ScheduleItemViewHolder, currentSchedule: ScheduleItem) {
-        weekList?.let {
-            val numbersOfWeeks = mutableListOf<Int>()
-            for (week in weekList) {
-                for (schedule in week.scheduleItemsList) {
-                    if (schedule == currentSchedule) {
-                        numbersOfWeeks.add(weekList.indexOf(week) + 1)
-                        break
+        weekList?.let {weekList ->
+            scheduleItemList?.let {scheduleItemList ->
+                val numbersOfWeeks = mutableListOf<Int>()
+                for (week in weekList) {
+                    val scheduleItemListOfThisWeek = scheduleItemList.filter { it.weekId == week.id }
+                    for (schedule in scheduleItemListOfThisWeek) {
+                        if (schedule == currentSchedule) {
+                            numbersOfWeeks.add(weekList.indexOf(week) + 1)
+                            break
+                        }
                     }
                 }
-            }
-            if (numbersOfWeeks.size == weekList.size) {
-                holder.textViewNumbersOfWeek.text = "∞"
-                holder.imageViewIcon.visibility = View.VISIBLE
-            } else {
-                holder.imageViewIcon.visibility = View.VISIBLE
-                var numbersOfWeekText = ""
-                for (numberOfWeek in numbersOfWeeks) {
-                    numbersOfWeekText += "$numberOfWeek,"
+                if (numbersOfWeeks.size == weekList.size) {
+                    holder.textViewNumbersOfWeek.text = "∞"
+                    holder.imageViewIcon.visibility = View.VISIBLE
+                } else {
+                    holder.imageViewIcon.visibility = View.VISIBLE
+                    var numbersOfWeekText = ""
+                    for (numberOfWeek in numbersOfWeeks) {
+                        numbersOfWeekText += "$numberOfWeek,"
+                    }
+                    holder.textViewNumbersOfWeek.text =
+                        numbersOfWeekText.substring(0, numbersOfWeekText.length - 1) // without ','
                 }
-                holder.textViewNumbersOfWeek.text =
-                    numbersOfWeekText.substring(0, numbersOfWeekText.length - 1) // without ','
             }
         }
     }

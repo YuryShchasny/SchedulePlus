@@ -1,4 +1,4 @@
-package com.sbapps.scheduleplus.domain.entity
+package com.sbapps.scheduleplus.presentation.onboarding
 
 import com.sbapps.scheduleplus.R
 

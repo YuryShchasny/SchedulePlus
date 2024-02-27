@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.sbapps.scheduleplus.R
 import com.sbapps.scheduleplus.databinding.FragmentWeekEditBinding
 import com.sbapps.scheduleplus.domain.entity.ScheduleItem
-import com.sbapps.scheduleplus.domain.entity.Week
 import com.sbapps.scheduleplus.presentation.adapters.editweek.EditWeekAdapter
 
 
@@ -56,7 +55,7 @@ class WeekEditFragment : Fragment() {
             if (viewModel.getDialogState()) {
                 val exampleName = ContextCompat.getString(requireContext(), R.string.example)
                 val examplePlace = ContextCompat.getString(requireContext(), R.string.place)
-                showDialog(ScheduleItem(name = exampleName, place = examplePlace))
+                showDialog(ScheduleItem(name = exampleName, place = examplePlace, weekId = weekId))
             }
         }
     }
@@ -64,36 +63,33 @@ class WeekEditFragment : Fragment() {
     private fun setObservable() {
         viewModel.dialogClosed.observe(viewLifecycleOwner) {
             if (it) {
-                viewModel.setIsLoadFinished(false)
+                viewModel.setIsLoad(true)
             }
         }
-        viewModel.isLoadFinished.observe(viewLifecycleOwner) {
-            if (it) {
+        viewModel.isLoad.observe(viewLifecycleOwner) {
+            if (!it) {
                 binding.progressBar.visibility = View.GONE
                 binding.nestedScrollView.visibility = View.VISIBLE
             } else {
                 binding.progressBar.visibility = View.VISIBLE
             }
         }
-        viewModel.weekList.observe(viewLifecycleOwner) { list ->
-            viewModel.setIsLoadFinished(true)
-            val week = list.find {
-                it.id == weekId
-            } ?: throw RuntimeException("Week not found")
-            setupAdapter(week)
+        viewModel.scheduleItemList.observe(viewLifecycleOwner) { scheduleItemList ->
+            viewModel.setIsLoad(false)
+            setupAdapter(scheduleItemList.filter { it.weekId == weekId })
         }
     }
 
-    private fun setupAdapter(week: Week) {
-        adapter = EditWeekAdapter(requireContext(), week)
+    private fun setupAdapter(scheduleItemList: List<ScheduleItem>) {
+        adapter = EditWeekAdapter(requireContext(), scheduleItemList)
         adapter.onScheduleItemClickListener = { scheduleItem ->
             if (viewModel.getDialogState()) {
                 showDialog(scheduleItem)
             }
         }
         adapter.onScheduleItemSwiped = {
-            viewModel.setIsLoadFinished(false)
-            viewModel.deleteScheduleItem(week.id, it)
+            viewModel.setIsLoad(false)
+            viewModel.deleteScheduleItem(it)
         }
         binding.recyclerViewWeekEdit.adapter = adapter
     }
@@ -102,9 +98,9 @@ class WeekEditFragment : Fragment() {
         val scheduleEditDialog =
             ScheduleItemEditDialog(requireContext(), scheduleItem) {
                 if (it.id == ScheduleItem.UNDEFINED_ID) {
-                    viewModel.addScheduleItem(weekId, it)
+                    viewModel.addScheduleItem(it)
                 } else {
-                    viewModel.editScheduleItem(weekId, it)
+                    viewModel.editScheduleItem(it)
                 }
                 viewModel.setDialogStateClosed()
             }

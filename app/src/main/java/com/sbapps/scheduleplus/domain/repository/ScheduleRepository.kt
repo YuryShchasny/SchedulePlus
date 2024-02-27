@@ -5,9 +5,12 @@ import com.sbapps.scheduleplus.domain.entity.ScheduleItem
 import com.sbapps.scheduleplus.domain.entity.Week
 
 interface ScheduleRepository {
-    suspend fun addScheduleItem(weekId: Int, scheduleItem: ScheduleItem)
+    suspend fun addScheduleItem(scheduleItem: ScheduleItem)
 
-    suspend fun deleteScheduleItem(weekId: Int, scheduleItem: ScheduleItem)
+    suspend fun deleteScheduleItem(scheduleItem: ScheduleItem)
+
+    suspend fun editScheduleItem(scheduleItem: ScheduleItem)
+    fun getScheduleItemList(): LiveData<List<ScheduleItem>>
 
     suspend fun addWeek(week: Week)
 
@@ -19,7 +22,6 @@ interface ScheduleRepository {
 
     suspend fun getWeek(weekId: Int): Week
 
-    suspend fun setWeekActive(week: Week)
+   suspend fun setWeekActive(week: Week)
 
-    suspend fun editScheduleItem(weekId: Int, scheduleItem: ScheduleItem)
 }

@@ -8,11 +8,12 @@ data class ScheduleItem(
     val endTime: String = "14:00",
     val dayOfWeek: DayOfWeek = DayOfWeek.MONDAY,
     val place: String,
+    val weekId: Int,
     val color: Int = STANDARD_COLOR,
-    var id: Int = UNDEFINED_ID
+    val id: Int = UNDEFINED_ID
 ) {
     companion object {
-        const val UNDEFINED_ID = -1
+        const val UNDEFINED_ID = 0
         const val STANDARD_COLOR = Color.GREEN
 
         fun getTimeAsMinutes(time: String): Int {

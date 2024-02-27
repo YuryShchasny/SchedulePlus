@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class ScheduleAdapter(private val context: Context, private var weekList: List<Week>) :
+class ScheduleAdapter(private val context: Context, private val weekList: List<Week>, private val scheduleItemList: List<ScheduleItem>) :
     RecyclerView.Adapter<ScheduleViewHolder>() {
 
 
@@ -28,13 +28,13 @@ class ScheduleAdapter(private val context: Context, private var weekList: List<W
 
     init {
         var activeWeek = 0
-
         weekList.forEachIndexed { index, week ->
             if (week.isActive) {
                 activeWeek = index
             }
             val daysOfWeek = mutableListOf<DayOfWeek>()
-            for (scheduleItem in week.scheduleItemsList) {
+            val scheduleItemListOfThisWeek = scheduleItemList.filter { it.weekId == week.id }
+            for (scheduleItem in scheduleItemListOfThisWeek) {
                 if (!daysOfWeek.contains(scheduleItem.dayOfWeek)) {
                     daysOfWeek.add(scheduleItem.dayOfWeek)
                 }
@@ -51,8 +51,9 @@ class ScheduleAdapter(private val context: Context, private var weekList: List<W
         allDaysOfWeek = allDaysOfWeek.filter { dayOfWeek ->
             dayOfWeek.number != activeWeek || dayOfWeek.dayOfWeek.ordinal >= currentDayOfWeekValue
         }.toMutableList()
-        allDaysOfWeek = allDaysOfWeek.sortedWith(compareByDescending { it.number == activeWeek })
-            .toMutableList()
+        val beforeActiveWeek = allDaysOfWeek.filter { it.number < activeWeek }
+        val afterActiveWeek = allDaysOfWeek.filter { it.number >= activeWeek }
+        allDaysOfWeek = (afterActiveWeek + beforeActiveWeek).toMutableList()
         var currentWeek = 0
         weekList.find { it.isActive }?.let {
             currentWeek = weekList.indexOf(it)
@@ -89,15 +90,16 @@ class ScheduleAdapter(private val context: Context, private var weekList: List<W
                             R.string.week
                         )
                     } ${dayOfWeek.number + 1}"
-        var scheduleItemList = mutableListOf<ScheduleItem>()
-        for (scheduleItem in weekList[dayOfWeek.number].scheduleItemsList) {
+        var scheduleItemListOfThisDay = mutableListOf<ScheduleItem>()
+        val scheduleItemListOfThisWeek = scheduleItemList.filter { it.weekId == weekList[dayOfWeek.number].id }
+        for (scheduleItem in scheduleItemListOfThisWeek) {
             if (scheduleItem.dayOfWeek == dayOfWeek.dayOfWeek) {
-                scheduleItemList.add(scheduleItem)
+                scheduleItemListOfThisDay.add(scheduleItem)
             }
         }
-        val adapter = ScheduleItemListAdapter(context, null, false)
-        scheduleItemList = scheduleItemList.toSet().toMutableList()
-        val sortedList = scheduleItemList.sortedBy { ScheduleItem.getTimeAsMinutes(it.startTime) }
+        val adapter = ScheduleItemListAdapter(context, null, null, false)
+        scheduleItemListOfThisDay = scheduleItemListOfThisDay.toSet().toMutableList()
+        val sortedList = scheduleItemListOfThisDay.sortedBy { ScheduleItem.getTimeAsMinutes(it.startTime) }
         adapter.submitList(sortedList)
         holder.recyclerViewSchedule.adapter = adapter
     }

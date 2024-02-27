@@ -7,10 +7,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.sbapps.scheduleplus.data.ScheduleRepositoryImpl
 import com.sbapps.scheduleplus.domain.entity.ScheduleItem
-import com.sbapps.scheduleplus.domain.usecases.AddScheduleItemUseCase
-import com.sbapps.scheduleplus.domain.usecases.DeleteScheduleItemUseCase
-import com.sbapps.scheduleplus.domain.usecases.EditScheduleItemUseCase
-import com.sbapps.scheduleplus.domain.usecases.GetWeekListUseCase
+import com.sbapps.scheduleplus.domain.usecases.scheduleitem.AddScheduleItemUseCase
+import com.sbapps.scheduleplus.domain.usecases.scheduleitem.DeleteScheduleItemUseCase
+import com.sbapps.scheduleplus.domain.usecases.scheduleitem.EditScheduleItemUseCase
+import com.sbapps.scheduleplus.domain.usecases.scheduleitem.GetScheduleItemListUseCase
 import kotlinx.coroutines.launch
 
 class WeekEditViewModel(application: Application) : AndroidViewModel(application) {
@@ -19,15 +19,15 @@ class WeekEditViewModel(application: Application) : AndroidViewModel(application
 
     private val deleteScheduleItemUseCase = DeleteScheduleItemUseCase(repository)
     private val addScheduleItemUseCase = AddScheduleItemUseCase(repository)
-    private val getWeekListUseCase = GetWeekListUseCase(repository)
     private val editScheduleItemUseCase = EditScheduleItemUseCase(repository)
+    private val getScheduleItemListUseCase = GetScheduleItemListUseCase(repository)
 
-    var weekList = getWeekListUseCase()
+    val scheduleItemList = getScheduleItemListUseCase()
 
-    private var _isLoadFinished = MutableLiveData<Boolean>().apply {
-        value = false
+    private var _isLoad = MutableLiveData<Boolean>().apply {
+        value = true
     }
-    val isLoadFinished: LiveData<Boolean> = _isLoadFinished
+    val isLoad: LiveData<Boolean> = _isLoad
 
 
     private var _dialogClosed = MutableLiveData<Boolean>().apply {
@@ -36,22 +36,22 @@ class WeekEditViewModel(application: Application) : AndroidViewModel(application
     val dialogClosed: LiveData<Boolean> = _dialogClosed
 
 
-    fun deleteScheduleItem(weekId: Int, scheduleItem: ScheduleItem) {
+    fun deleteScheduleItem(scheduleItem: ScheduleItem) {
         viewModelScope.launch {
-            deleteScheduleItemUseCase(weekId, scheduleItem)
+            deleteScheduleItemUseCase(scheduleItem)
         }
     }
 
-    fun addScheduleItem(weekId: Int, scheduleItem: ScheduleItem) {
+    fun addScheduleItem(scheduleItem: ScheduleItem) {
         viewModelScope.launch {
-            addScheduleItemUseCase(weekId, scheduleItem)
+            addScheduleItemUseCase(scheduleItem)
         }
     }
 
 
-    fun editScheduleItem(weekId: Int, scheduleItem: ScheduleItem) {
+    fun editScheduleItem(scheduleItem: ScheduleItem) {
         viewModelScope.launch {
-            editScheduleItemUseCase(weekId, scheduleItem)
+            editScheduleItemUseCase(scheduleItem)
         }
     }
 
@@ -67,7 +67,7 @@ class WeekEditViewModel(application: Application) : AndroidViewModel(application
         return _dialogClosed.value ?: throw NullPointerException()
     }
 
-    fun setIsLoadFinished(isLoadFinished: Boolean) {
-        _isLoadFinished.value = isLoadFinished
+    fun setIsLoad(isLoad: Boolean) {
+        _isLoad.value = isLoad
     }
 }

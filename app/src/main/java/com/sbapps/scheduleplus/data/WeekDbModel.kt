@@ -7,6 +7,5 @@ import androidx.room.PrimaryKey
 data class WeekDbModel(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    var isActive: Boolean,
-    val scheduleItemsList: String,
+    val isActive: Boolean
 )

@@ -9,17 +9,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sbapps.scheduleplus.R
 import com.sbapps.scheduleplus.domain.entity.DayOfWeek
 import com.sbapps.scheduleplus.domain.entity.ScheduleItem
-import com.sbapps.scheduleplus.domain.entity.Week
 import com.sbapps.scheduleplus.presentation.adapters.scheduleitem.ScheduleItemListAdapter
 
-class EditWeekAdapter(private val context: Context, private val week: Week) :
+class EditWeekAdapter(private val context: Context, private val scheduleItemList: List<ScheduleItem>) :
     RecyclerView.Adapter<EditWeekViewHolder>() {
 
 
     private val daysOfWeek = mutableListOf<DayOfWeek>()
 
     init {
-        for (schedule in week.scheduleItemsList) {
+        for (schedule in scheduleItemList) {
             if (!daysOfWeek.contains(schedule.dayOfWeek)) {
                 daysOfWeek.add(schedule.dayOfWeek)
             }
@@ -44,13 +43,13 @@ class EditWeekAdapter(private val context: Context, private val week: Week) :
         val dayOfWeek = daysOfWeek[position]
         holder.textViewDayOfWeek.text =
             ContextCompat.getString(context, dayOfWeek.getStringResourceId())
-        val scheduleItemList = mutableListOf<ScheduleItem>()
-        for (scheduleItem in week.scheduleItemsList) {
+        val scheduleItemListOfThisDay = mutableListOf<ScheduleItem>()
+        for (scheduleItem in scheduleItemList) {
             if (scheduleItem.dayOfWeek == dayOfWeek) {
-                scheduleItemList.add(scheduleItem)
+                scheduleItemListOfThisDay.add(scheduleItem)
             }
         }
-        val adapter = ScheduleItemListAdapter(context, listOf(week), false)
+        val adapter = ScheduleItemListAdapter(context, null, null,false)
         onScheduleItemSwiped?.let {
             val callback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
                 override fun onMove(
@@ -70,7 +69,7 @@ class EditWeekAdapter(private val context: Context, private val week: Week) :
             val itemTouchHelper = ItemTouchHelper(callback)
             itemTouchHelper.attachToRecyclerView(holder.recyclerViewScheduleItem)
         }
-        val sortedList = scheduleItemList.sortedBy { ScheduleItem.getTimeAsMinutes(it.startTime) }
+        val sortedList = scheduleItemListOfThisDay.sortedBy { ScheduleItem.getTimeAsMinutes(it.startTime) }
         adapter.submitList(sortedList)
         adapter.onScheduleItemClickListener = onScheduleItemClickListener
         holder.recyclerViewScheduleItem.adapter = adapter
