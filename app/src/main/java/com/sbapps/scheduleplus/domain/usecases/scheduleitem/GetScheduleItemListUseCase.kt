@@ -1,0 +1,9 @@
+package com.sbapps.scheduleplus.domain.usecases.scheduleitem
+
+import androidx.lifecycle.LiveData
+import com.sbapps.scheduleplus.domain.entity.ScheduleItem
+import com.sbapps.scheduleplus.domain.repository.ScheduleRepository
+
+class GetScheduleItemListUseCase(private val scheduleRepository: ScheduleRepository) {
+    operator fun invoke(): LiveData<List<ScheduleItem>> = scheduleRepository.getScheduleItemList()
+}

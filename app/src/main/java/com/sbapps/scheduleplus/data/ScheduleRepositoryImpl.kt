@@ -3,6 +3,7 @@ package com.sbapps.scheduleplus.data
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
+import com.sbapps.scheduleplus.data.mappers.ScheduleItemMapper
 import com.sbapps.scheduleplus.data.mappers.WeekMapper
 import com.sbapps.scheduleplus.domain.entity.ScheduleItem
 import com.sbapps.scheduleplus.domain.entity.Week
@@ -12,27 +13,26 @@ class ScheduleRepositoryImpl(application: Application) : ScheduleRepository {
 
     private val weekDao = AppDatabase.getDatabase(application).weekDao()
     private val weekMapper = WeekMapper()
+    private val scheduleItemDao = AppDatabase.getDatabase(application).scheduleItemDao()
+    private val scheduleItemMapper = ScheduleItemMapper()
 
 
-    override suspend fun addScheduleItem(weekId: Int, scheduleItem: ScheduleItem) {
-        val week = getWeek(weekId)
-        val scheduleItemList = getWeek(weekId).scheduleItemsList.toMutableList()
-        for (i in 0..scheduleItemList.size) {
-            if (!scheduleItemList.any { it.id == i }) {
-                scheduleItem.id = i
-            }
-        }
-        scheduleItemList.add(scheduleItem)
-        week.scheduleItemsList = scheduleItemList
-        editWeek(week)
+    override suspend fun addScheduleItem(scheduleItem: ScheduleItem) {
+        scheduleItemDao.insertScheduleItem(scheduleItemMapper.mapEntityToDbModel(scheduleItem))
     }
 
-    override suspend fun deleteScheduleItem(weekId: Int, scheduleItem: ScheduleItem) {
-        val week = getWeek(weekId)
-        val scheduleItemList = getWeek(weekId).scheduleItemsList.toMutableList()
-        scheduleItemList.remove(scheduleItem)
-        week.scheduleItemsList = scheduleItemList
-        editWeek(week)
+    override suspend fun deleteScheduleItem(scheduleItem: ScheduleItem) {
+        scheduleItemDao.deleteScheduleItem(scheduleItemMapper.mapEntityToDbModel(scheduleItem))
+    }
+
+    override suspend fun editScheduleItem(scheduleItem: ScheduleItem) {
+        scheduleItemDao.insertScheduleItem(scheduleItemMapper.mapEntityToDbModel(scheduleItem))
+    }
+
+    override fun getScheduleItemList(): LiveData<List<ScheduleItem>> {
+        return scheduleItemDao.getAllScheduleItems().map {
+            scheduleItemMapper.mapListDbModelToListEntity(it)
+        }
     }
 
     override suspend fun addWeek(week: Week) {
@@ -41,10 +41,7 @@ class ScheduleRepositoryImpl(application: Application) : ScheduleRepository {
 
     override suspend fun deleteWeek(week: Week) {
         weekDao.deleteWeek(weekMapper.mapEntityToDbModel(week))
-    }
-
-    override suspend fun editWeek(week: Week) {
-        weekDao.insertWeek(weekMapper.mapEntityToDbModel(week))
+        scheduleItemDao.deleteAllScheduleItemsByWeek(week.id)
     }
 
     override fun getWeekList(): LiveData<List<Week>> {
@@ -54,27 +51,19 @@ class ScheduleRepositoryImpl(application: Application) : ScheduleRepository {
     }
 
     override suspend fun getWeek(weekId: Int): Week {
-        val dbModel = weekDao.getWeekById(weekId)
-        return weekMapper.mapDbModelToEntity(dbModel)
+        return weekMapper.mapDbModelToEntity(weekDao.getWeekById(weekId))
     }
 
     override suspend fun setWeekActive(week: Week) {
         weekDao.getActiveWeek()?.let {
             val activeWeek = weekMapper.mapDbModelToEntity(it)
-            activeWeek.isActive = false
-            editWeek(activeWeek)
+            val activeWeekEdit = activeWeek.copy(isActive = false)
+            editWeek(activeWeekEdit)
         }
-        week.isActive = true
-        editWeek(week)
+        editWeek(week.copy(isActive = true))
     }
-
-    override suspend fun editScheduleItem(weekId: Int, scheduleItem: ScheduleItem) {
-        val week = getWeek(weekId)
-        val scheduleItemList = getWeek(weekId).scheduleItemsList.toMutableList()
-        scheduleItemList.removeIf { it.id == scheduleItem.id }
-        scheduleItemList.add(scheduleItem)
-        week.scheduleItemsList = scheduleItemList
-        editWeek(week)
+    override suspend fun editWeek(week: Week) {
+        weekDao.insertWeek(weekMapper.mapEntityToDbModel(week))
     }
 
 }

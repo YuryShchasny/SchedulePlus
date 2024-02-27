@@ -5,10 +5,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.sbapps.scheduleplus.data.ScheduleRepositoryImpl
 import com.sbapps.scheduleplus.domain.entity.Week
-import com.sbapps.scheduleplus.domain.usecases.AddWeekUseCase
-import com.sbapps.scheduleplus.domain.usecases.DeleteWeekUseCase
-import com.sbapps.scheduleplus.domain.usecases.GetWeekListUseCase
-import com.sbapps.scheduleplus.domain.usecases.SetWeekActiveUseCase
+import com.sbapps.scheduleplus.domain.usecases.week.AddWeekUseCase
+import com.sbapps.scheduleplus.domain.usecases.week.DeleteWeekUseCase
+import com.sbapps.scheduleplus.domain.usecases.week.GetWeekListUseCase
+import com.sbapps.scheduleplus.domain.usecases.week.SetWeekActiveUseCase
 import kotlinx.coroutines.launch
 
 class ScheduleEditViewModel(application: Application) : AndroidViewModel(application) {
@@ -27,7 +27,7 @@ class ScheduleEditViewModel(application: Application) : AndroidViewModel(applica
 
     fun addWeek() {
         val active = getWeekListSize() == 0
-        val newWeek = Week(active, mutableListOf())
+        val newWeek = Week(active)
         viewModelScope.launch {
             addWeekUseCase(newWeek)
         }

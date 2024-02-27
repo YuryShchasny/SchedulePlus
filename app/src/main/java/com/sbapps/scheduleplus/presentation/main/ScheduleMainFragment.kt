@@ -7,7 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.sbapps.scheduleplus.databinding.FragmentScheduleMainBinding
+import com.sbapps.scheduleplus.domain.entity.ScheduleItem
+import com.sbapps.scheduleplus.domain.entity.Week
 import com.sbapps.scheduleplus.presentation.adapters.dayofweek.DayOfWeekListAdapter
+import com.sbapps.scheduleplus.presentation.adapters.schedule.ScheduleAdapter
 
 class ScheduleMainFragment : Fragment() {
 
@@ -30,18 +33,25 @@ class ScheduleMainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.isLoadFinished.observe(viewLifecycleOwner) {
-            if (it) {
+        viewModel.isLoad.observe(viewLifecycleOwner) {
+            if (!it) {
                 binding.progressBar.visibility = View.GONE
                 binding.recyclerViewMainSchedule.visibility = View.VISIBLE
             }
         }
+        viewModel.scheduleItemList.observe(viewLifecycleOwner){
+            viewModel.setIsLoad(false)
+            updateAdapter(viewModel.getWeekList(), it)
+        }
         viewModel.weekList.observe(viewLifecycleOwner) {
-            viewModel.setIsLoadFinished(true)
-            val adapter = DayOfWeekListAdapter(requireContext(), it)
-            binding.recyclerViewMainSchedule.adapter = adapter
+            viewModel.setIsLoad(false)
+            updateAdapter(it, viewModel.getScheduleItemList())
         }
 
+    }
+    private fun updateAdapter(weekList: List<Week>, scheduleItemList: List<ScheduleItem>) {
+        val adapter = DayOfWeekListAdapter(requireContext(), weekList, scheduleItemList)
+        binding.recyclerViewMainSchedule.adapter = adapter
     }
 
     override fun onDestroyView() {

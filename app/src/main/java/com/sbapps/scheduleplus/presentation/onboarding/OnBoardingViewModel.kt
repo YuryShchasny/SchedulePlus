@@ -3,7 +3,6 @@ package com.sbapps.scheduleplus.presentation.onboarding
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.sbapps.scheduleplus.domain.entity.OnBoarding
 
 class OnBoardingViewModel : ViewModel() {
 
