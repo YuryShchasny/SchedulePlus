@@ -108,9 +108,7 @@
                     android:textColor="?attr/textFillColor"
                     android:textSize="16sp"
                     app:drawableStartCompat="@drawable/ic_telegram"
-                    app:drawableTint="?attr/textFillColor"
-                    app:layout_constraintBottom_toTopOf="@+id/textViewTelegram"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:drawableTint="?attr/textFillColor" />
 
                 <TextView
                     android:id="@+id/textViewDeveloper"
@@ -126,8 +124,7 @@
                     android:textColor="?attr/textFillColor"
                     android:textSize="16sp"
                     app:drawableStartCompat="@drawable/ic_developer"
-                    app:layout_constraintBottom_toTopOf="@+id/switch1"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:drawableTint="?attr/textFillColor"/>
             </LinearLayout>
 
 
