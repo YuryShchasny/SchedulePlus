@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sbapps.scheduleplus.R
 import com.sbapps.scheduleplus.domain.entity.DayOfWeek
 import com.sbapps.scheduleplus.domain.entity.ScheduleItem
-import com.sbapps.scheduleplus.domain.entity.Week
 import com.sbapps.scheduleplus.presentation.adapters.scheduleitem.ScheduleItemListAdapter
 
 class EditWeekAdapter(private val context: Context, private val scheduleItemList: List<ScheduleItem>) :

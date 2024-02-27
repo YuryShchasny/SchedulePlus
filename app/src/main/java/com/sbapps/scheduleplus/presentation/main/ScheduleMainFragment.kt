@@ -10,7 +10,6 @@ import com.sbapps.scheduleplus.databinding.FragmentScheduleMainBinding
 import com.sbapps.scheduleplus.domain.entity.ScheduleItem
 import com.sbapps.scheduleplus.domain.entity.Week
 import com.sbapps.scheduleplus.presentation.adapters.dayofweek.DayOfWeekListAdapter
-import com.sbapps.scheduleplus.presentation.adapters.schedule.ScheduleAdapter
 
 class ScheduleMainFragment : Fragment() {
 

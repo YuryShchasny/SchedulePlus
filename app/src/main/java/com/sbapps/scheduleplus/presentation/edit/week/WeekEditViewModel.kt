@@ -11,7 +11,6 @@ import com.sbapps.scheduleplus.domain.usecases.scheduleitem.AddScheduleItemUseCa
 import com.sbapps.scheduleplus.domain.usecases.scheduleitem.DeleteScheduleItemUseCase
 import com.sbapps.scheduleplus.domain.usecases.scheduleitem.EditScheduleItemUseCase
 import com.sbapps.scheduleplus.domain.usecases.scheduleitem.GetScheduleItemListUseCase
-import com.sbapps.scheduleplus.domain.usecases.week.GetWeekListUseCase
 import kotlinx.coroutines.launch
 
 class WeekEditViewModel(application: Application) : AndroidViewModel(application) {

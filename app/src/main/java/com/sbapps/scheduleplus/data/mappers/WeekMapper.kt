@@ -1,9 +1,6 @@
 package com.sbapps.scheduleplus.data.mappers
 
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.sbapps.scheduleplus.data.WeekDbModel
-import com.sbapps.scheduleplus.domain.entity.ScheduleItem
 import com.sbapps.scheduleplus.domain.entity.Week
 
 class WeekMapper {

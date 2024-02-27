@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.sbapps.scheduleplus.R
 import com.sbapps.scheduleplus.databinding.FragmentWeekEditBinding
 import com.sbapps.scheduleplus.domain.entity.ScheduleItem
-import com.sbapps.scheduleplus.domain.entity.Week
 import com.sbapps.scheduleplus.presentation.adapters.editweek.EditWeekAdapter
 
 
