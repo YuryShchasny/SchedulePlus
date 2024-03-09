@@ -155,8 +155,8 @@ class ScheduleItemEditDialog(
     private fun getEditSchedule(): ScheduleItem {
         val startTime = textViewStartTime.text.toString()
         val endTime = textViewEndTime.text.toString()
-        val name = textViewName.text.toString()
-        val place = textViewPlace.text.toString()
+        val name = textViewName.text.toString().trim()
+        val place = textViewPlace.text.toString().trim()
         val dayOfWeek = DayOfWeek.entries[spinnerDayOfWeek.selectedItemPosition]
         val color = viewColorShape.backgroundTintList?.defaultColor
             ?: throw RuntimeException("Failed to get color when saving ScheduleItem")
