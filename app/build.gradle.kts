@@ -54,7 +54,6 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
     implementation ("com.larswerkman:HoloColorPicker:1.5")
-    implementation ("com.google.code.gson:gson:2.10")
     implementation("com.google.devtools.ksp:symbol-processing-api:1.9.22-1.0.17")
 
     testImplementation("junit:junit:4.13.2")
