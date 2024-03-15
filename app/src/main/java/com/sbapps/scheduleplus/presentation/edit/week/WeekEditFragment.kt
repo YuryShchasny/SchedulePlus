@@ -1,5 +1,6 @@
 package com.sbapps.scheduleplus.presentation.edit.week
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,10 +8,14 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.sbapps.scheduleplus.MyApplication
 import com.sbapps.scheduleplus.R
 import com.sbapps.scheduleplus.databinding.FragmentWeekEditBinding
+import com.sbapps.scheduleplus.di.FragmentComponent
+import com.sbapps.scheduleplus.di.ViewModelFactory
 import com.sbapps.scheduleplus.domain.entity.ScheduleItem
 import com.sbapps.scheduleplus.presentation.adapters.editweek.EditWeekAdapter
+import javax.inject.Inject
 
 
 class WeekEditFragment : Fragment() {
@@ -30,9 +35,23 @@ class WeekEditFragment : Fragment() {
     private val binding
         get() = _binding ?: throw RuntimeException("FragmentWeekEditBinding is null")
 
-    private val viewModel: WeekEditViewModel by lazy {
-        ViewModelProvider(this)[WeekEditViewModel::class.java]
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[WeekEditViewModel::class.java]
     }
+
+    private val component : FragmentComponent by lazy {
+        (requireActivity().application as MyApplication).component
+            .fragmentComponentFactory().create()
+    }
+
+    override fun onAttach(context: Context) {
+        component.inject(this)
+        super.onAttach(context)
+    }
+
     private lateinit var adapter: EditWeekAdapter
     private var weekId = UNDEFINED_WEEK_ID
 

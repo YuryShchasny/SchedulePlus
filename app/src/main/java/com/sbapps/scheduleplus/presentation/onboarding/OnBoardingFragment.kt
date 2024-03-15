@@ -1,5 +1,6 @@
 package com.sbapps.scheduleplus.presentation.onboarding
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +9,12 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.sbapps.scheduleplus.MyApplication
 import com.sbapps.scheduleplus.R
 import com.sbapps.scheduleplus.databinding.FragmentOnBoardingBinding
+import com.sbapps.scheduleplus.di.FragmentComponent
+import com.sbapps.scheduleplus.di.ViewModelFactory
+import javax.inject.Inject
 
 class OnBoardingFragment : Fragment() {
 
@@ -26,8 +31,21 @@ class OnBoardingFragment : Fragment() {
         }
     }
 
-    private val viewModel: OnBoardingViewModel by lazy {
-        ViewModelProvider(this)[OnBoardingViewModel::class.java]
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[OnBoardingViewModel::class.java]
+    }
+
+    private val component : FragmentComponent by lazy {
+        (requireActivity().application as MyApplication).component
+            .fragmentComponentFactory().create()
+    }
+
+    override fun onAttach(context: Context) {
+        component.inject(this)
+        super.onAttach(context)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
