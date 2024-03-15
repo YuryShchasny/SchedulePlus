@@ -8,14 +8,14 @@ import com.sbapps.scheduleplus.data.mappers.WeekMapper
 import com.sbapps.scheduleplus.domain.entity.ScheduleItem
 import com.sbapps.scheduleplus.domain.entity.Week
 import com.sbapps.scheduleplus.domain.repository.ScheduleRepository
+import javax.inject.Inject
 
-class ScheduleRepositoryImpl(application: Application) : ScheduleRepository {
-
-    private val weekDao = AppDatabase.getDatabase(application).weekDao()
-    private val weekMapper = WeekMapper()
-    private val scheduleItemDao = AppDatabase.getDatabase(application).scheduleItemDao()
-    private val scheduleItemMapper = ScheduleItemMapper()
-
+class ScheduleRepositoryImpl @Inject constructor(
+    private val weekDao: WeekDao,
+    private val weekMapper: WeekMapper,
+    private val scheduleItemDao: ScheduleItemDao,
+    private val scheduleItemMapper: ScheduleItemMapper
+) : ScheduleRepository {
 
     override suspend fun addScheduleItem(scheduleItem: ScheduleItem) {
         scheduleItemDao.insertScheduleItem(scheduleItemMapper.mapEntityToDbModel(scheduleItem))
@@ -62,6 +62,7 @@ class ScheduleRepositoryImpl(application: Application) : ScheduleRepository {
         }
         editWeek(week.copy(isActive = true))
     }
+
     override suspend fun editWeek(week: Week) {
         weekDao.insertWeek(weekMapper.mapEntityToDbModel(week))
     }

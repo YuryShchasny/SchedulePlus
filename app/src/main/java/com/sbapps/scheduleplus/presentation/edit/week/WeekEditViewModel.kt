@@ -1,26 +1,23 @@
 package com.sbapps.scheduleplus.presentation.edit.week
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sbapps.scheduleplus.data.ScheduleRepositoryImpl
 import com.sbapps.scheduleplus.domain.entity.ScheduleItem
 import com.sbapps.scheduleplus.domain.usecases.scheduleitem.AddScheduleItemUseCase
 import com.sbapps.scheduleplus.domain.usecases.scheduleitem.DeleteScheduleItemUseCase
 import com.sbapps.scheduleplus.domain.usecases.scheduleitem.EditScheduleItemUseCase
 import com.sbapps.scheduleplus.domain.usecases.scheduleitem.GetScheduleItemListUseCase
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class WeekEditViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val repository = ScheduleRepositoryImpl(application)
-
-    private val deleteScheduleItemUseCase = DeleteScheduleItemUseCase(repository)
-    private val addScheduleItemUseCase = AddScheduleItemUseCase(repository)
-    private val editScheduleItemUseCase = EditScheduleItemUseCase(repository)
-    private val getScheduleItemListUseCase = GetScheduleItemListUseCase(repository)
+class WeekEditViewModel @Inject constructor(
+    private val deleteScheduleItemUseCase: DeleteScheduleItemUseCase,
+    private val addScheduleItemUseCase: AddScheduleItemUseCase,
+    private val editScheduleItemUseCase: EditScheduleItemUseCase,
+    getScheduleItemListUseCase: GetScheduleItemListUseCase
+) : ViewModel() {
 
     val scheduleItemList = getScheduleItemListUseCase()
 

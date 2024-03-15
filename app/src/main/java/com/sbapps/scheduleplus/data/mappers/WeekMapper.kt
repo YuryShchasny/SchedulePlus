@@ -2,8 +2,9 @@ package com.sbapps.scheduleplus.data.mappers
 
 import com.sbapps.scheduleplus.data.WeekDbModel
 import com.sbapps.scheduleplus.domain.entity.Week
+import javax.inject.Inject
 
-class WeekMapper {
+class WeekMapper @Inject constructor() {
     fun mapEntityToDbModel(week: Week): WeekDbModel = WeekDbModel(
         id = week.id,
         isActive = week.isActive

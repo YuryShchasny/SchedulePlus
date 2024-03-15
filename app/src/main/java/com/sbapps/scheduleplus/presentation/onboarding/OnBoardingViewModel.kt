@@ -3,8 +3,9 @@ package com.sbapps.scheduleplus.presentation.onboarding
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import javax.inject.Inject
 
-class OnBoardingViewModel : ViewModel() {
+class OnBoardingViewModel @Inject constructor() : ViewModel() {
 
     private var onBoardingList = listOf<OnBoarding>()
     private var _currentOnBoarding = MutableLiveData<OnBoarding>()

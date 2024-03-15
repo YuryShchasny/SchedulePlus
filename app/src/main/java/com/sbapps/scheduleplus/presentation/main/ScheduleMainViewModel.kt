@@ -4,17 +4,18 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.sbapps.scheduleplus.data.ScheduleRepositoryImpl
 import com.sbapps.scheduleplus.domain.entity.ScheduleItem
 import com.sbapps.scheduleplus.domain.entity.Week
 import com.sbapps.scheduleplus.domain.usecases.scheduleitem.GetScheduleItemListUseCase
 import com.sbapps.scheduleplus.domain.usecases.week.GetWeekListUseCase
+import javax.inject.Inject
 
-class ScheduleMainViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository = ScheduleRepositoryImpl(application)
-
-    private val getScheduleItemListUseCase = GetScheduleItemListUseCase(repository)
-    private val getWeekListUseCase = GetWeekListUseCase(repository)
+class ScheduleMainViewModel @Inject constructor(
+    getScheduleItemListUseCase: GetScheduleItemListUseCase,
+    getWeekListUseCase: GetWeekListUseCase
+) : ViewModel() {
 
     val scheduleItemList = getScheduleItemListUseCase()
     val weekList = getWeekListUseCase()
@@ -28,10 +29,12 @@ class ScheduleMainViewModel(application: Application) : AndroidViewModel(applica
     fun setIsLoad(isLoad: Boolean) {
         _isLoad.value = isLoad
     }
-    fun getScheduleItemList() : List<ScheduleItem> {
+
+    fun getScheduleItemList(): List<ScheduleItem> {
         return scheduleItemList.value ?: listOf()
     }
-    fun getWeekList() : List<Week> {
+
+    fun getWeekList(): List<Week> {
         return weekList.value ?: listOf()
     }
 }

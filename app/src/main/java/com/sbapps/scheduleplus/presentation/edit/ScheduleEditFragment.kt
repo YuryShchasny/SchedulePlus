@@ -1,5 +1,6 @@
 package com.sbapps.scheduleplus.presentation.edit
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,21 +10,39 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.sbapps.scheduleplus.MyApplication
 import com.sbapps.scheduleplus.R
 import com.sbapps.scheduleplus.databinding.FragmentScheduleEditBinding
+import com.sbapps.scheduleplus.di.FragmentComponent
+import com.sbapps.scheduleplus.di.ViewModelFactory
 import com.sbapps.scheduleplus.presentation.adapters.week.WeekListAdapter
 import com.sbapps.scheduleplus.presentation.edit.week.WeekEditFragment
+import javax.inject.Inject
 
 class ScheduleEditFragment : Fragment() {
 
     private var _binding: FragmentScheduleEditBinding? = null
     private val binding
         get() = _binding ?: throw RuntimeException("FragmentScheduleEditBinding is null")
-
-    private val viewModel: ScheduleEditViewModel by lazy {
-        ViewModelProvider(this)[ScheduleEditViewModel::class.java]
-    }
     private lateinit var adapter: WeekListAdapter
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[ScheduleEditViewModel::class.java]
+    }
+
+    private val component : FragmentComponent by lazy {
+        (requireActivity().application as MyApplication).component
+            .fragmentComponentFactory().create()
+    }
+
+    override fun onAttach(context: Context) {
+        component.inject(this)
+        super.onAttach(context)
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

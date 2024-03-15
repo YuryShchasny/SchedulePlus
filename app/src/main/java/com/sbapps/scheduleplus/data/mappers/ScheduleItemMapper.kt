@@ -2,8 +2,9 @@ package com.sbapps.scheduleplus.data.mappers
 
 import com.sbapps.scheduleplus.data.ScheduleItemDbModel
 import com.sbapps.scheduleplus.domain.entity.ScheduleItem
+import javax.inject.Inject
 
-class ScheduleItemMapper {
+class ScheduleItemMapper @Inject constructor() {
     fun mapEntityToDbModel(scheduleItem: ScheduleItem): ScheduleItemDbModel = ScheduleItemDbModel(
         id = scheduleItem.id,
         name = scheduleItem.name,
