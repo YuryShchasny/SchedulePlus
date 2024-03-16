@@ -2,7 +2,6 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
-    id("kotlin-kapt")
 }
 
 android {
@@ -69,6 +68,6 @@ dependencies {
     ksp("androidx.room:room-compiler:$room_version")
 
     implementation ("com.google.dagger:dagger:2.50")
-    kapt ("com.google.dagger:dagger-compiler:2.50")
+    ksp ("com.google.dagger:dagger-compiler:2.50")
 
 }

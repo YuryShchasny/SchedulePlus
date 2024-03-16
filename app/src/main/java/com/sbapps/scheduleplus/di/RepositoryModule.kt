@@ -8,7 +8,7 @@ import dagger.Module
 @Module
 interface RepositoryModule {
 
-    @ApplicationScope
     @Binds
+    @ApplicationScope
     fun bindScheduleRepository(impl: ScheduleRepositoryImpl) : ScheduleRepository
 }
