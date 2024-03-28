@@ -5,9 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.sbapps.scheduleplus.MyApplication
 import com.sbapps.scheduleplus.R
 import com.sbapps.scheduleplus.databinding.FragmentWeekEditBinding
@@ -15,6 +19,7 @@ import com.sbapps.scheduleplus.di.FragmentComponent
 import com.sbapps.scheduleplus.di.ViewModelFactory
 import com.sbapps.scheduleplus.domain.entity.ScheduleItem
 import com.sbapps.scheduleplus.presentation.adapters.editweek.EditWeekAdapter
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -42,7 +47,7 @@ class WeekEditFragment : Fragment() {
         ViewModelProvider(this, viewModelFactory)[WeekEditViewModel::class.java]
     }
 
-    private val component : FragmentComponent by lazy {
+    private val component: FragmentComponent by lazy {
         (requireActivity().application as MyApplication).component
             .fragmentComponentFactory().create()
     }
@@ -68,46 +73,52 @@ class WeekEditFragment : Fragment() {
         arguments?.let {
             weekId = it.getInt(WEEK_ID)
         }
-        viewModel.setDialogStateClosed()
         setObservable()
         binding.cardViewButtonAddScheduleItem.setOnClickListener {
-            if (viewModel.getDialogState()) {
-                val exampleName = ContextCompat.getString(requireContext(), R.string.example)
-                val examplePlace = ContextCompat.getString(requireContext(), R.string.place)
-                showDialog(ScheduleItem(name = exampleName, place = examplePlace, weekId = weekId))
-            }
+            val exampleName = ContextCompat.getString(requireContext(), R.string.example)
+            val examplePlace = ContextCompat.getString(requireContext(), R.string.place)
+            viewModel.setScheduleEditDialogState(ScheduleItem(name = exampleName, place = examplePlace, weekId = weekId))
         }
     }
 
     private fun setObservable() {
-        viewModel.dialogClosed.observe(viewLifecycleOwner) {
-            if (it) {
-                viewModel.setIsLoad(true)
-            }
-        }
-        viewModel.isLoad.observe(viewLifecycleOwner) {
-            if (!it) {
-                binding.progressBar.visibility = View.GONE
-                binding.nestedScrollView.visibility = View.VISIBLE
-            } else {
-                binding.progressBar.visibility = View.VISIBLE
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.state.collect { state ->
+                    when (state) {
+                        is WeekEditFragmentState.Content -> {
+                            binding.progressBar.visibility = View.GONE
+                            binding.nestedScrollView.visibility = View.VISIBLE
+                            setupAdapter(state.currencyScheduleItemList.filter { it.weekId == weekId })
+                        }
+
+                        is WeekEditFragmentState.Error -> {
+                            Toast.makeText(requireContext(), state.msg, Toast.LENGTH_SHORT).show()
+                        }
+
+                        is WeekEditFragmentState.ScheduleItemEditDialog -> {
+                            showDialog(state.scheduleItem)
+                        }
+
+                        WeekEditFragmentState.Loading -> {
+                            binding.nestedScrollView.visibility = View.GONE
+                            binding.progressBar.visibility = View.VISIBLE
+                        }
+                    }
+                }
             }
         }
         viewModel.scheduleItemList.observe(viewLifecycleOwner) { scheduleItemList ->
-            viewModel.setIsLoad(false)
-            setupAdapter(scheduleItemList.filter { it.weekId == weekId })
+            viewModel.setContentState(scheduleItemList)
         }
     }
 
     private fun setupAdapter(scheduleItemList: List<ScheduleItem>) {
         adapter = EditWeekAdapter(requireContext(), scheduleItemList)
         adapter.onScheduleItemClickListener = { scheduleItem ->
-            if (viewModel.getDialogState()) {
-                showDialog(scheduleItem)
-            }
+            viewModel.setScheduleEditDialogState(scheduleItem)
         }
         adapter.onScheduleItemSwiped = {
-            viewModel.setIsLoad(false)
             viewModel.deleteScheduleItem(it)
         }
         binding.recyclerViewWeekEdit.adapter = adapter
@@ -121,11 +132,9 @@ class WeekEditFragment : Fragment() {
                 } else {
                     viewModel.editScheduleItem(it)
                 }
-                viewModel.setDialogStateClosed()
             }
         scheduleEditDialog.setCanceledOnTouchOutside(false)
         scheduleEditDialog.show()
-        viewModel.setDialogStateOpened()
     }
 
     override fun onDestroyView() {

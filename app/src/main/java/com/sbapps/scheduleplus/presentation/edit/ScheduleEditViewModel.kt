@@ -1,10 +1,7 @@
 package com.sbapps.scheduleplus.presentation.edit
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sbapps.scheduleplus.data.ScheduleRepositoryImpl
 import com.sbapps.scheduleplus.domain.entity.Week
 import com.sbapps.scheduleplus.domain.usecases.week.AddWeekUseCase
 import com.sbapps.scheduleplus.domain.usecases.week.DeleteWeekUseCase
@@ -24,7 +21,7 @@ class ScheduleEditViewModel @Inject constructor(
         private const val FIRST_WEEK = 0
     }
 
-    var weekList = getWeekListUseCase()
+    val weekList = getWeekListUseCase()
 
     fun addWeek() {
         val active = getWeekListSize() == 0

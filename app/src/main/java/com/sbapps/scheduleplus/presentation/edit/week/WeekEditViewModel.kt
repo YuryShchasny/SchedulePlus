@@ -1,7 +1,5 @@
 package com.sbapps.scheduleplus.presentation.edit.week
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sbapps.scheduleplus.domain.entity.ScheduleItem
@@ -9,6 +7,8 @@ import com.sbapps.scheduleplus.domain.usecases.scheduleitem.AddScheduleItemUseCa
 import com.sbapps.scheduleplus.domain.usecases.scheduleitem.DeleteScheduleItemUseCase
 import com.sbapps.scheduleplus.domain.usecases.scheduleitem.EditScheduleItemUseCase
 import com.sbapps.scheduleplus.domain.usecases.scheduleitem.GetScheduleItemListUseCase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,18 +19,10 @@ class WeekEditViewModel @Inject constructor(
     getScheduleItemListUseCase: GetScheduleItemListUseCase
 ) : ViewModel() {
 
+    private val _state = MutableStateFlow<WeekEditFragmentState>(WeekEditFragmentState.Loading)
+    val state = _state.asStateFlow()
+
     val scheduleItemList = getScheduleItemListUseCase()
-
-    private var _isLoad = MutableLiveData<Boolean>().apply {
-        value = true
-    }
-    val isLoad: LiveData<Boolean> = _isLoad
-
-
-    private var _dialogClosed = MutableLiveData<Boolean>().apply {
-        value = true
-    }
-    val dialogClosed: LiveData<Boolean> = _dialogClosed
 
 
     fun deleteScheduleItem(scheduleItem: ScheduleItem) {
@@ -51,20 +43,12 @@ class WeekEditViewModel @Inject constructor(
             editScheduleItemUseCase(scheduleItem)
         }
     }
-
-    fun setDialogStateOpened() {
-        _dialogClosed.value = false
+    fun setContentState(scheduleItemList: List<ScheduleItem>) {
+        _state.value = WeekEditFragmentState.Content(scheduleItemList)
     }
 
-    fun setDialogStateClosed() {
-        _dialogClosed.value = true
+    fun setScheduleEditDialogState(scheduleItem: ScheduleItem) {
+        _state.value = WeekEditFragmentState.ScheduleItemEditDialog(scheduleItem)
     }
 
-    fun getDialogState(): Boolean {
-        return _dialogClosed.value ?: throw NullPointerException()
-    }
-
-    fun setIsLoad(isLoad: Boolean) {
-        _isLoad.value = isLoad
-    }
 }

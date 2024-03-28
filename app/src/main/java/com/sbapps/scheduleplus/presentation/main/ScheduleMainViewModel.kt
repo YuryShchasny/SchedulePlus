@@ -1,15 +1,12 @@
 package com.sbapps.scheduleplus.presentation.main
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.sbapps.scheduleplus.data.ScheduleRepositoryImpl
 import com.sbapps.scheduleplus.domain.entity.ScheduleItem
 import com.sbapps.scheduleplus.domain.entity.Week
 import com.sbapps.scheduleplus.domain.usecases.scheduleitem.GetScheduleItemListUseCase
 import com.sbapps.scheduleplus.domain.usecases.week.GetWeekListUseCase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 class ScheduleMainViewModel @Inject constructor(
@@ -17,24 +14,27 @@ class ScheduleMainViewModel @Inject constructor(
     getWeekListUseCase: GetWeekListUseCase
 ) : ViewModel() {
 
+    private val _state = MutableStateFlow<ScheduleMainState>(ScheduleMainState.Loading)
+    val state = _state.asStateFlow()
+
     val scheduleItemList = getScheduleItemListUseCase()
     val weekList = getWeekListUseCase()
 
-    private var _isLoad = MutableLiveData<Boolean>().apply {
-        value = true
-    }
-    val isLoad: LiveData<Boolean> = _isLoad
-
-
-    fun setIsLoad(isLoad: Boolean) {
-        _isLoad.value = isLoad
+    private fun setContentState(weekList: List<Week>, scheduleItemList: List<ScheduleItem>) {
+        _state.value = ScheduleMainState.Content(weekList, scheduleItemList)
     }
 
-    fun getScheduleItemList(): List<ScheduleItem> {
-        return scheduleItemList.value ?: listOf()
+    fun setWeekList(list: List<Week>) {
+        val state = state.value as? ScheduleMainState.Content
+        state?.let {
+            setContentState(list, state.currencyScheduleItemList)
+        } ?: setContentState(list, arrayListOf())
     }
 
-    fun getWeekList(): List<Week> {
-        return weekList.value ?: listOf()
+    fun setScheduleItemList(list: List<ScheduleItem>) {
+        val state = state.value as? ScheduleMainState.Content
+        state?.let {
+            setContentState(state.currencyWeekList, list)
+        } ?: setContentState(arrayListOf(), list)
     }
 }

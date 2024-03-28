@@ -54,8 +54,8 @@ class ScheduleEditFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupRecyclerView()
         viewModel.weekList.observe(viewLifecycleOwner) {
-            setupRecyclerView()
             adapter.submitList(it)
         }
         binding.cardViewButtonAdd.setOnClickListener {
@@ -86,7 +86,6 @@ class ScheduleEditFragment : Fragment() {
                 val item = adapter.currentList[viewHolder.adapterPosition]
                 viewModel.deleteWeek(item)
             }
-
         }
         val itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper.attachToRecyclerView(binding.recyclerViewWeekEdit)
