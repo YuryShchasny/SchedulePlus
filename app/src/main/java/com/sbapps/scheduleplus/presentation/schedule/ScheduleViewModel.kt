@@ -1,12 +1,12 @@
 package com.sbapps.scheduleplus.presentation.schedule
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sbapps.scheduleplus.domain.entity.ScheduleItem
 import com.sbapps.scheduleplus.domain.entity.Week
 import com.sbapps.scheduleplus.domain.usecases.scheduleitem.GetScheduleItemListUseCase
 import com.sbapps.scheduleplus.domain.usecases.week.GetWeekListUseCase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 class ScheduleViewModel @Inject constructor(
@@ -14,24 +14,27 @@ class ScheduleViewModel @Inject constructor(
     getWeekListUseCase: GetWeekListUseCase
 ) : ViewModel() {
 
+    private val _state = MutableStateFlow<ScheduleFragmentState>(ScheduleFragmentState.Loading)
+    val state = _state.asStateFlow()
+
     val scheduleItemList = getScheduleItemListUseCase()
     val weekList = getWeekListUseCase()
 
-
-    private var _isLoad = MutableLiveData<Boolean>().apply {
-        value = true
-    }
-    val isLoad: LiveData<Boolean> = _isLoad
-
-    fun setIsLoad(isLoad: Boolean) {
-        _isLoad.value = isLoad
+    private fun setContentState(weekList: List<Week>, scheduleItemList: List<ScheduleItem>) {
+        _state.value = ScheduleFragmentState.Content(weekList, scheduleItemList)
     }
 
-    fun getScheduleItemList(): List<ScheduleItem> {
-        return scheduleItemList.value ?: listOf()
+    fun setWeekList(list: List<Week>) {
+        val state = state.value as? ScheduleFragmentState.Content
+        state?.let {
+            setContentState(list, state.currencyScheduleItemList)
+        } ?: setContentState(list, arrayListOf())
     }
 
-    fun getWeekList(): List<Week> {
-        return weekList.value ?: listOf()
+    fun setScheduleItemList(list: List<ScheduleItem>) {
+        val state = state.value as? ScheduleFragmentState.Content
+        state?.let {
+            setContentState(state.currencyWeekList, list)
+        } ?: setContentState(arrayListOf(), list)
     }
 }
