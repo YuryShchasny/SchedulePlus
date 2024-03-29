@@ -1,15 +1,17 @@
 package com.sbapps.scheduleplus.presentation.onboarding
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 class OnBoardingViewModel @Inject constructor() : ViewModel() {
 
     private var onBoardingList = listOf<OnBoarding>()
-    private var _currentOnBoarding = MutableLiveData<OnBoarding>()
-    val currentOnBoarding: LiveData<OnBoarding> = _currentOnBoarding
+    private val _currentOnBoarding by lazy {
+        MutableStateFlow(onBoardingList.firstOrNull())
+    }
+    val currentOnBoarding = _currentOnBoarding.asStateFlow()
 
     fun setList(isNightMode: Boolean) {
         onBoardingList = if (isNightMode) {
