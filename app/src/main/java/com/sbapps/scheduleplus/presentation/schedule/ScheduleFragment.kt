@@ -53,18 +53,24 @@ class ScheduleFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setObservable()
+    }
+
+    private fun setObservable() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewModel.state.collect {state ->
-                    when(state) {
+                viewModel.state.collect { state ->
+                    when (state) {
                         is ScheduleFragmentState.Content -> {
                             binding.progressBar.visibility = View.GONE
                             binding.recyclerViewSchedule.visibility = View.VISIBLE
                             updateAdapter(state.currencyWeekList, state.currencyScheduleItemList)
                         }
+
                         is ScheduleFragmentState.Error -> {
                             Toast.makeText(requireContext(), state.msg, Toast.LENGTH_SHORT).show()
                         }
+
                         ScheduleFragmentState.Loading -> {
                             binding.progressBar.visibility = View.VISIBLE
                             binding.recyclerViewSchedule.visibility = View.GONE
@@ -73,11 +79,19 @@ class ScheduleFragment : Fragment() {
                 }
             }
         }
-        viewModel.scheduleItemList.observe(viewLifecycleOwner) {scheduleItemList ->
-            viewModel.setScheduleItemList(scheduleItemList)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.scheduleItemList.collect {
+                    viewModel.setScheduleItemList(it)
+                }
+            }
         }
-        viewModel.weekList.observe(viewLifecycleOwner) {weekList ->
-           viewModel.setWeekList(weekList)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.weekList.collect {
+                    viewModel.setWeekList(it)
+                }
+            }
         }
     }
 

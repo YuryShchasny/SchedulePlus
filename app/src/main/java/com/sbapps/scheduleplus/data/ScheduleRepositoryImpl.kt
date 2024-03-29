@@ -1,13 +1,12 @@
 package com.sbapps.scheduleplus.data
 
-import android.app.Application
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
 import com.sbapps.scheduleplus.data.mappers.ScheduleItemMapper
 import com.sbapps.scheduleplus.data.mappers.WeekMapper
 import com.sbapps.scheduleplus.domain.entity.ScheduleItem
 import com.sbapps.scheduleplus.domain.entity.Week
 import com.sbapps.scheduleplus.domain.repository.ScheduleRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class ScheduleRepositoryImpl @Inject constructor(
@@ -29,7 +28,7 @@ class ScheduleRepositoryImpl @Inject constructor(
         scheduleItemDao.insertScheduleItem(scheduleItemMapper.mapEntityToDbModel(scheduleItem))
     }
 
-    override fun getScheduleItemList(): LiveData<List<ScheduleItem>> {
+    override fun getScheduleItemList(): Flow<List<ScheduleItem>> {
         return scheduleItemDao.getAllScheduleItems().map {
             scheduleItemMapper.mapListDbModelToListEntity(it)
         }
@@ -44,7 +43,7 @@ class ScheduleRepositoryImpl @Inject constructor(
         scheduleItemDao.deleteAllScheduleItemsByWeek(week.id)
     }
 
-    override fun getWeekList(): LiveData<List<Week>> {
+    override fun getWeekList(): Flow<List<Week>> {
         return weekDao.getAllWeeks().map {
             weekMapper.mapListDbModelToListEntity(it)
         }
@@ -55,12 +54,13 @@ class ScheduleRepositoryImpl @Inject constructor(
     }
 
     override suspend fun setWeekActive(week: Week) {
-        weekDao.getActiveWeek()?.let {
+
+        val activeWeek = weekDao.getActiveWeek()?.let {
             val activeWeek = weekMapper.mapDbModelToEntity(it)
-            val activeWeekEdit = activeWeek.copy(isActive = false)
-            editWeek(activeWeekEdit)
+            activeWeek.copy(isActive = false)
         }
         editWeek(week.copy(isActive = true))
+        activeWeek?.let { editWeek(it) }
     }
 
     override suspend fun editWeek(week: Week) {

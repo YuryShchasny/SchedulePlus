@@ -6,7 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -15,8 +18,10 @@ import com.sbapps.scheduleplus.R
 import com.sbapps.scheduleplus.databinding.FragmentScheduleEditBinding
 import com.sbapps.scheduleplus.di.FragmentComponent
 import com.sbapps.scheduleplus.di.ViewModelFactory
+import com.sbapps.scheduleplus.domain.entity.Week
 import com.sbapps.scheduleplus.presentation.adapters.week.WeekListAdapter
 import com.sbapps.scheduleplus.presentation.edit.week.WeekEditFragment
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ScheduleEditFragment : Fragment() {
@@ -33,7 +38,7 @@ class ScheduleEditFragment : Fragment() {
         ViewModelProvider(this, viewModelFactory)[ScheduleEditViewModel::class.java]
     }
 
-    private val component : FragmentComponent by lazy {
+    private val component: FragmentComponent by lazy {
         (requireActivity().application as MyApplication).component
             .fragmentComponentFactory().create()
     }
@@ -54,22 +59,34 @@ class ScheduleEditFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupRecyclerView()
-        viewModel.weekList.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
-        }
-        binding.cardViewButtonAdd.setOnClickListener {
-            viewModel.addWeek()
+        setObservable()
+    }
+    private fun setObservable() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.weekList.collect {list ->
+                    binding.cardViewButtonAdd.setOnClickListener {
+                        viewModel.addWeek(list.isEmpty())
+                    }
+                    if(list.find { it.isActive } == null && list.isNotEmpty()) {
+                        viewModel.setWeekActive(list.first())
+                    }
+                    else {
+                        setupRecyclerView(list)
+                    }
+                }
+            }
         }
     }
 
-    private fun setupRecyclerView() {
+    private fun setupRecyclerView(list: List<Week>) {
         adapter = WeekListAdapter(requireContext())
         binding.recyclerViewWeekEdit.adapter = adapter
         binding.recyclerViewWeekEdit.itemAnimator = null
         setupLongClickListener()
         setupOnClickListener()
         setupSwipeListener()
+        adapter.submitList(list)
     }
 
     private fun setupSwipeListener() {
