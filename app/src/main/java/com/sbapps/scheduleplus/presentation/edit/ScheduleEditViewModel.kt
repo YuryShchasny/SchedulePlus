@@ -17,16 +17,11 @@ class ScheduleEditViewModel @Inject constructor(
     private val setWeekActiveUseCase : SetWeekActiveUseCase
 ) : ViewModel() {
 
-    companion object {
-        private const val FIRST_WEEK = 0
-    }
-
     val weekList = getWeekListUseCase()
 
-    fun addWeek() {
-        val active = getWeekListSize() == 0
-        val newWeek = Week(active)
+    fun addWeek(isActive: Boolean) {
         viewModelScope.launch {
+            val newWeek = Week(isActive)
             addWeekUseCase(newWeek)
         }
     }
@@ -42,6 +37,4 @@ class ScheduleEditViewModel @Inject constructor(
             setWeekActiveUseCase(week)
         }
     }
-
-    private fun getWeekListSize(): Int = weekList.value?.size ?: FIRST_WEEK
 }

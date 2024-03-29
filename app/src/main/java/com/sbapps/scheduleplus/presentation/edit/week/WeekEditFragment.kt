@@ -108,8 +108,12 @@ class WeekEditFragment : Fragment() {
                 }
             }
         }
-        viewModel.scheduleItemList.observe(viewLifecycleOwner) { scheduleItemList ->
-            viewModel.setContentState(scheduleItemList)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.scheduleItemList.collect {
+                    viewModel.setContentState(it)
+                }
+            }
         }
     }
 

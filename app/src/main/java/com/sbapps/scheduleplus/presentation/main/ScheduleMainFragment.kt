@@ -34,7 +34,7 @@ class ScheduleMainFragment : Fragment() {
         ViewModelProvider(this, viewModelFactory)[ScheduleMainViewModel::class.java]
     }
 
-    private val component : FragmentComponent by lazy {
+    private val component: FragmentComponent by lazy {
         (requireActivity().application as MyApplication).component
             .fragmentComponentFactory().create()
     }
@@ -55,18 +55,28 @@ class ScheduleMainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setObservable()
+    }
+
+    private fun setObservable() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewModel.state.collect {state ->
-                    when(state) {
+                viewModel.state.collect { state ->
+                    when (state) {
                         is ScheduleMainState.Content -> {
                             binding.progressBar.visibility = View.GONE
                             binding.recyclerViewMainSchedule.visibility = View.VISIBLE
-                            updateAdapter(state.currencyWeekList, state.currencyScheduleItemList)
+                            updateAdapter(
+                                state.currencyWeekList,
+                                state.currencyScheduleItemList
+                            )
                         }
+
                         is ScheduleMainState.Error -> {
-                            Toast.makeText(requireContext(), state.msg, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), state.msg, Toast.LENGTH_SHORT)
+                                .show()
                         }
+
                         ScheduleMainState.Loading -> {
                             binding.progressBar.visibility = View.VISIBLE
                             binding.recyclerViewMainSchedule.visibility = View.GONE
@@ -75,14 +85,22 @@ class ScheduleMainFragment : Fragment() {
                 }
             }
         }
-        viewModel.scheduleItemList.observe(viewLifecycleOwner) {scheduleItemList ->
-            viewModel.setScheduleItemList(scheduleItemList)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.scheduleItemList.collect {
+                    viewModel.setScheduleItemList(it)
+                }
+            }
         }
-        viewModel.weekList.observe(viewLifecycleOwner) {weekList ->
-            viewModel.setWeekList(weekList)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.weekList.collect {
+                    viewModel.setWeekList(it)
+                }
+            }
         }
-
     }
+
     private fun updateAdapter(weekList: List<Week>, scheduleItemList: List<ScheduleItem>) {
         val adapter = DayOfWeekListAdapter(requireContext(), weekList, scheduleItemList)
         binding.recyclerViewMainSchedule.adapter = adapter

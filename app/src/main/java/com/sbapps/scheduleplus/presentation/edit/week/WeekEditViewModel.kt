@@ -24,7 +24,6 @@ class WeekEditViewModel @Inject constructor(
 
     val scheduleItemList = getScheduleItemListUseCase()
 
-
     fun deleteScheduleItem(scheduleItem: ScheduleItem) {
         viewModelScope.launch {
             deleteScheduleItemUseCase(scheduleItem)
