@@ -5,15 +5,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.sbapps.scheduleplus.MyApplication
 import com.sbapps.scheduleplus.R
 import com.sbapps.scheduleplus.databinding.FragmentOnBoardingBinding
 import com.sbapps.scheduleplus.di.FragmentComponent
 import com.sbapps.scheduleplus.di.ViewModelFactory
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class OnBoardingFragment : Fragment() {
@@ -43,6 +48,8 @@ class OnBoardingFragment : Fragment() {
             .fragmentComponentFactory().create()
     }
 
+    private lateinit var onBoardingRoundList: List<ImageView>
+
     override fun onAttach(context: Context) {
         component.inject(this)
         super.onAttach(context)
@@ -51,7 +58,9 @@ class OnBoardingFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            viewModel.setList(it.getBoolean(IS_NIGHT_MODE))
+            if(viewModel.currentOnBoarding.value == null) {
+                viewModel.setList(it.getBoolean(IS_NIGHT_MODE))
+            }
         }
     }
 
@@ -65,44 +74,59 @@ class OnBoardingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val onBoardingRoundList = listOf(
+        onBoardingRoundList = listOf(
             binding.imageViewOnBoarding1,
             binding.imageViewOnBoarding2,
             binding.imageViewOnBoarding3,
             binding.imageViewOnBoarding4,
         )
-        viewModel.currentOnBoarding.observe(viewLifecycleOwner) {
-            binding.textViewTitle.text = ContextCompat.getString(requireContext(), it.titleResId)
-            binding.textViewDescription.text =
-                ContextCompat.getString(requireContext(), it.descriptionResId)
-            binding.imageViewOnBoarding.setImageDrawable(
-                ContextCompat.getDrawable(
-                    requireContext(),
-                    it.imageResId
-                )
-            )
-            for (onBoardingRound in onBoardingRoundList) {
-                if (onBoardingRoundList.indexOf(onBoardingRound) == viewModel.getIndexOfOnBoarding()) {
-                    onBoardingRound.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            requireContext(),
-                            R.drawable.on_boarding_round_active
-                        )
-                    )
-                } else {
-                    onBoardingRound.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            requireContext(),
-                            R.drawable.on_boarding_round_inactive
-                        )
-                    )
-                }
-            }
-        }
+        setObservable()
         binding.buttonContinue.setOnClickListener {
             if (!viewModel.getNextOnBoarding()) {
                 findNavController().popBackStack()
             }
         }
+    }
+
+    private fun setObservable() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.currentOnBoarding.collect {onBoarding ->
+                    onBoarding?.let {
+                        setOnBoarding(onBoarding)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setOnBoarding(currentOnBoarding: OnBoarding) {
+        binding.textViewTitle.text = ContextCompat.getString(requireContext(), currentOnBoarding.titleResId)
+        binding.textViewDescription.text =
+            ContextCompat.getString(requireContext(), currentOnBoarding.descriptionResId)
+        binding.imageViewOnBoarding.setImageDrawable(
+            ContextCompat.getDrawable(
+                requireContext(),
+                currentOnBoarding.imageResId
+            )
+        )
+        for (onBoardingRound in onBoardingRoundList) {
+            if (onBoardingRoundList.indexOf(onBoardingRound) == viewModel.getIndexOfOnBoarding()) {
+                onBoardingRound.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.on_boarding_round_active
+                    )
+                )
+            } else {
+                onBoardingRound.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.on_boarding_round_inactive
+                    )
+                )
+            }
+        }
+
     }
 }
