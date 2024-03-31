@@ -9,6 +9,7 @@ import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
@@ -27,8 +28,13 @@ class MainActivity : AppCompatActivity() {
         private const val PREFS = "prefs"
         private const val NIGHT_MODE_KEY = "night_mode_key"
         private const val SHOW_BOARDING = "show_boarding"
+        private const val SET_WORKER = "set_worker"
         private const val URL_GITHUB = "https://github.com/YuryShchasny"
         private const val URL_TELEGRAM = "https://t.me/+5KOe_nWbcXwwYzcy"
+    }
+
+    private val viewModel by lazy {
+        ViewModelProvider(this)[MainViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +53,14 @@ class MainActivity : AppCompatActivity() {
         setNavController()
         setListeners()
         showOnBoarding(isDarkTheme)
+        if (sharedPreferences.getBoolean(SET_WORKER, true)) {
+            startWorker()
+        }
+    }
+
+    private fun startWorker() {
+        viewModel.startWorker(applicationContext)
+        sharedPreferences.edit().putBoolean(SET_WORKER, false).apply()
     }
 
     private fun showOnBoarding(isDarkTheme: Boolean) {

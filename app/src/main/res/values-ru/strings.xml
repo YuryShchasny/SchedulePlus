@@ -39,4 +39,5 @@
     <string name="logo">Логотип</string>
     <string name="button_to_add">Кнопка добавить</string>
     <string name="schedule_icon">Иконка расписания</string>
+    <string name="notification_text">Установлена следующая неделя.</string>
 </resources>
