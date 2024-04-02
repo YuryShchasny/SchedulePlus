@@ -1,7 +1,6 @@
 package com.sbapps.scheduleplus.di
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.sbapps.scheduleplus.presentation.edit.ScheduleEditViewModel
 import com.sbapps.scheduleplus.presentation.edit.week.WeekEditViewModel
 import com.sbapps.scheduleplus.presentation.main.ScheduleMainViewModel
@@ -9,10 +8,7 @@ import com.sbapps.scheduleplus.presentation.onboarding.OnBoardingViewModel
 import com.sbapps.scheduleplus.presentation.schedule.ScheduleViewModel
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
-import dagger.internal.Provider
 import dagger.multibindings.IntoMap
-import dagger.multibindings.StringKey
 
 @Module
 interface ViewModelModule {

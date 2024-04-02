@@ -47,4 +47,5 @@
     <string name="logo">Logo</string>
     <string name="button_to_add">Button to add</string>
     <string name="schedule_icon">Schedule icon</string>
+    <string name="notification_text">Next week is set.</string>
 </resources>

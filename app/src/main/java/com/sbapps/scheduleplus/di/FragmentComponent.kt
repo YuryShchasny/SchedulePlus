@@ -7,9 +7,7 @@ import com.sbapps.scheduleplus.presentation.onboarding.OnBoardingFragment
 import com.sbapps.scheduleplus.presentation.schedule.ScheduleFragment
 import dagger.Subcomponent
 
-@Subcomponent(
-    modules = [ViewModelModule::class]
-)
+@Subcomponent
 interface FragmentComponent {
 
    fun inject(fragment: ScheduleMainFragment)
