@@ -79,20 +79,45 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/switchNightMode"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
-                    android:drawableStart="@drawable/ic_night_mode"
-                    android:drawablePadding="8dp"
-                    android:drawableTint="?attr/textFillColor"
-                    android:fontFamily="@font/rubik_regular"
-                    android:text="@string/night_mode"
-                    android:textColor="?attr/textFillColor"
-                    android:textSize="16sp"
-                    app:switchMinWidth="32dp"
-                    app:switchPadding="16dp" />
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_night_mode"
+                        app:tint="?attr/textFillColor"/>
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switchNightMode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginVertical="8dp"
+                        android:fontFamily="@font/rubik_regular"
+                        android:text="@string/night_mode"
+                        android:textColor="?attr/textFillColor"
+                        android:textSize="16sp"
+                        app:switchPadding="16dp" />
+                </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_telegram"
+                    app:tint="?attr/textFillColor" />
 
                 <TextView
                     android:id="@+id/textViewTelegram"
@@ -101,30 +126,40 @@
                     android:layout_marginVertical="8dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:clickable="true"
-                    android:drawablePadding="8dp"
                     android:focusable="true"
                     android:fontFamily="@font/rubik_regular"
                     android:text="@string/telegram"
                     android:textColor="?attr/textFillColor"
-                    android:textSize="16sp"
-                    app:drawableStartCompat="@drawable/ic_telegram"
-                    app:drawableTint="?attr/textFillColor" />
+                    android:textSize="16sp" />
+            </LinearLayout>
 
-                <TextView
-                    android:id="@+id/textViewDeveloper"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:drawablePadding="8dp"
-                    android:focusable="true"
-                    android:fontFamily="@font/rubik_regular"
-                    android:text="@string/about_the_developer"
-                    android:textColor="?attr/textFillColor"
-                    android:textSize="16sp"
-                    app:drawableStartCompat="@drawable/ic_developer"
-                    app:drawableTint="?attr/textFillColor"/>
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_developer"
+                        app:tint="?attr/textFillColor" />
+
+                    <TextView
+                        android:id="@+id/textViewDeveloper"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="8dp"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:fontFamily="@font/rubik_regular"
+                        android:text="@string/about_the_developer"
+                        android:textColor="?attr/textFillColor"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
             </LinearLayout>
 
 
