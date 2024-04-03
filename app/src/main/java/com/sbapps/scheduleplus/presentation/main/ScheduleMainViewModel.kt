@@ -5,6 +5,7 @@ import com.sbapps.scheduleplus.domain.entity.ScheduleItem
 import com.sbapps.scheduleplus.domain.entity.Week
 import com.sbapps.scheduleplus.domain.usecases.scheduleitem.GetScheduleItemListUseCase
 import com.sbapps.scheduleplus.domain.usecases.week.GetWeekListUseCase
+import com.sbapps.scheduleplus.presentation.schedule.ScheduleFragmentState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
@@ -21,6 +22,7 @@ class ScheduleMainViewModel @Inject constructor(
     val weekList = getWeekListUseCase()
 
     private fun setContentState(weekList: List<Week>, scheduleItemList: List<ScheduleItem>) {
+        _state.value = ScheduleMainState.Loading
         _state.value = ScheduleMainState.Content(weekList, scheduleItemList)
     }
 
