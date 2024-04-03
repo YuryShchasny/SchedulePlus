@@ -5,7 +5,6 @@ import com.sbapps.scheduleplus.domain.entity.ScheduleItem
 import com.sbapps.scheduleplus.domain.entity.Week
 import com.sbapps.scheduleplus.domain.usecases.scheduleitem.GetScheduleItemListUseCase
 import com.sbapps.scheduleplus.domain.usecases.week.GetWeekListUseCase
-import com.sbapps.scheduleplus.presentation.schedule.ScheduleFragmentState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
