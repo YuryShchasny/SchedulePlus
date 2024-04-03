@@ -21,6 +21,7 @@ class ScheduleMainViewModel @Inject constructor(
     val weekList = getWeekListUseCase()
 
     private fun setContentState(weekList: List<Week>, scheduleItemList: List<ScheduleItem>) {
+        _state.value = ScheduleMainState.Loading
         _state.value = ScheduleMainState.Content(weekList, scheduleItemList)
     }
 
