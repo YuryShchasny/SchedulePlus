@@ -7,13 +7,19 @@ import androidx.work.WorkManager
 import java.util.Calendar
 
 class MainViewModel : ViewModel() {
-    fun startWorker(context: Context) {
 
-        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+    private var workManager: WorkManager? = null
+    fun startWorker(context: Context) {
+        workManager = WorkManager.getInstance(context)
+        workManager?.enqueueUniquePeriodicWork(
             SetActiveWeekWorker.WORK_NAME,
             ExistingPeriodicWorkPolicy.KEEP,
             SetActiveWeekWorker.makeRequest(getMillisUntilNextMonday())
         )
+    }
+
+    fun cancelWorker(context: Context) {
+        workManager?.cancelAllWork() ?: WorkManager.getInstance(context).cancelAllWork()
     }
 
     private fun getMillisUntilNextMonday(): Long {

@@ -106,7 +106,6 @@ class ScheduleItemEditDialog(
         colorPicker.oldCenterColor = scheduleItem.color
     }
 
-    @SuppressLint("SetTextI18n")
     private fun setListeners() {
         colorPicker.setOnColorChangedListener {
             viewColorShape.backgroundTintList = ColorStateList.valueOf(it)

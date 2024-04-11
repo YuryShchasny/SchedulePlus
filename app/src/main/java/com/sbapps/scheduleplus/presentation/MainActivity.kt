@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val PREFS = "prefs"
         private const val NIGHT_MODE_KEY = "night_mode_key"
+        private const val WEEK_MODE_KEY = "week_mode_key"
         private const val SHOW_BOARDING = "show_boarding"
         private const val SET_WORKER = "set_worker"
         private const val URL_GITHUB = "https://github.com/YuryShchasny"
@@ -56,28 +57,27 @@ class MainActivity : AppCompatActivity() {
         if (sharedPreferences.getBoolean(SET_WORKER, true)) {
             startWorker()
         }
+        else {
+            binding.switchWeekMode.isChecked = sharedPreferences.getBoolean(WEEK_MODE_KEY, true)
+        }
+
     }
 
     private fun startWorker() {
-        viewModel.startWorker(applicationContext)
+        binding.switchWeekMode.isChecked = true
         sharedPreferences.edit().putBoolean(SET_WORKER, false).apply()
     }
 
     private fun showOnBoarding(isDarkTheme: Boolean) {
         sharedPreferences = getSharedPreferences(PREFS, MODE_PRIVATE)
-        when (sharedPreferences.getBoolean(SHOW_BOARDING, true)) {
-            true -> {
-                val bundle = OnBoardingFragment.getBundle(
-                    sharedPreferences.getBoolean(
-                        NIGHT_MODE_KEY, isDarkTheme
-                    )
+        if (sharedPreferences.getBoolean(SHOW_BOARDING, true)) {
+            val bundle = OnBoardingFragment.getBundle(
+                sharedPreferences.getBoolean(
+                    NIGHT_MODE_KEY, isDarkTheme
                 )
-                navController.navigate(R.id.onBoardingFragment, bundle)
-                sharedPreferences.edit().putBoolean(SHOW_BOARDING, false).apply()
-            }
-
-            false -> {
-            }
+            )
+            navController.navigate(R.id.onBoardingFragment, bundle)
+            sharedPreferences.edit().putBoolean(SHOW_BOARDING, false).apply()
         }
     }
 
@@ -113,6 +113,15 @@ class MainActivity : AppCompatActivity() {
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                 sharedPreferences.edit().putBoolean(NIGHT_MODE_KEY, false).apply()
+            }
+        }
+        binding.switchWeekMode.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                viewModel.startWorker(applicationContext)
+                sharedPreferences.edit().putBoolean(WEEK_MODE_KEY, true).apply()
+            } else {
+                viewModel.cancelWorker(applicationContext)
+                sharedPreferences.edit().putBoolean(WEEK_MODE_KEY, false).apply()
             }
         }
         binding.textViewTelegram.setOnClickListener {

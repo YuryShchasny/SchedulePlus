@@ -48,4 +48,5 @@
     <string name="button_to_add">Button to add</string>
     <string name="schedule_icon">Schedule icon</string>
     <string name="notification_text">Next week is set.</string>
+    <string name="automatic_week_switching">Automatic week switching</string>
 </resources>
